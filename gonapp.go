@@ -5,7 +5,7 @@ import (
 	"time"
 	"fmt"
 
-	"github.com/mellocraft/gon/servers"
+	"github.com/mellowarex/gon/servers"
 )
 
 type HServer struct {

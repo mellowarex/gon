@@ -15,7 +15,7 @@ import (
 	"strconv"
 	"reflect"
 
-	"github.com/mellocraft/gon/session"
+	"github.com/mellowarex/gon/session"
 )
 
 var (

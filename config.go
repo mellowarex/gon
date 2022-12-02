@@ -7,10 +7,10 @@ import (
 	"runtime"
 	"errors"
 
-	"github.com/mellocraft/gon/logs"
-	"github.com/mellocraft/gon/session"
-	"github.com/mellocraft/gon/utils"
-	"github.com/mellocraft/gon/context"
+	"github.com/mellowarex/gon/logs"
+	"github.com/mellowarex/gon/session"
+	"github.com/mellowarex/gon/utils"
+	"github.com/mellowarex/gon/context"
 )
 
 const (

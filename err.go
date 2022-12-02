@@ -2,8 +2,8 @@ package gon
 
 import (
 	"fmt"
-	"github.com/mellocraft/gon/logs"
-	"github.com/mellocraft/gon/utils"
+	"github.com/mellowarex/gon/logs"
+	"github.com/mellowarex/gon/utils"
 	"html/template"
 	"io"
 	"net/http"

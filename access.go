@@ -6,8 +6,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/mellocraft/gon/logs"
-	"github.com/mellocraft/gon/context"
+	"github.com/mellowarex/gon/logs"
+	"github.com/mellowarex/gon/context"
 )
 
 var (

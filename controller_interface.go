@@ -1,6 +1,6 @@
 package gon
 
-import "github.com/mellocraft/gon/context"
+import "github.com/mellowarex/gon/context"
 
 type ControllerInterface interface {
 	Init(ctrl *context.Context, listen Listen)

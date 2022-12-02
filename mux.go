@@ -8,8 +8,8 @@ import (
 	"strings"
 	"reflect"
 
-	"github.com/mellocraft/gon/context"
-	"github.com/mellocraft/gon/logs"
+	"github.com/mellowarex/gon/context"
+	"github.com/mellowarex/gon/logs"
 )
 
 type Multiplexer struct {

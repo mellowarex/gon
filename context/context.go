@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/mellocraft/gon/utils"
+	"github.com/mellowarex/gon/utils"
 )
 
 type Context struct {

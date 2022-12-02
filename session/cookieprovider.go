@@ -4,7 +4,7 @@ import (
 	"context"
 	"crypto/aes"
 	"crypto/cipher"
-	"github.com/mellocraft/gon/utils"
+	"github.com/mellowarex/gon/utils"
 )
 
 type cookieConfig struct {

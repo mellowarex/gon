@@ -1,4 +1,4 @@
-module github.com/mellocraft/gon
+module github.com/mellowarex/gon
 
 go 1.17
 

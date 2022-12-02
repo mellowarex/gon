@@ -11,7 +11,7 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
-	"github.com/mellocraft/gon/utils"
+	"github.com/mellowarex/gon/utils"
 	"io"
 	"strconv"
 	"time"

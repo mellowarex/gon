@@ -1,7 +1,7 @@
 package gon
 
 import (
-	"github.com/mellocraft/gon/session"
+	"github.com/mellowarex/gon/session"
 	"net/http"
 	"path/filepath"
 	"sync"

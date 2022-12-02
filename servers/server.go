@@ -15,7 +15,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/mellocraft/gon/logs"
+	"github.com/mellowarex/gon/logs"
 )
 
 type Server struct {
