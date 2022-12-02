@@ -1,0 +1,6 @@
+make gon operate dual servers
+2 or more servers with different ports
+
+enable web app to send mail from controller
+
+enable AccessLog
