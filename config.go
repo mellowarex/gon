@@ -81,7 +81,7 @@ func init() {
 			panic(err)
 		}
 	}
-	var filename = GConfig.EnvMode + ".json" // Fetch config/[production|development].json config by default
+	var filename = "development.json" // Fetch config/[production|development].json config by default
 	// select production.json if set in ENV VAR
 	// ENV var overrides which config to use for web app
 	if os.Getenv("GON_ENV") != "" {
