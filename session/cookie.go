@@ -47,8 +47,8 @@ func (this *Cookie) Save(w http.ResponseWriter) {
 
 // Get value from cookie session
 func (this *Cookie) Get(ctx context.Context, key interface{}) interface{} {
-	this.lock.Lock()
-	defer this.lock.Unlock()
+	this.lock.RLock()
+	defer this.lock.RUnlock()
 	if v, ok := this.values[key]; ok {
 		return v
 	}

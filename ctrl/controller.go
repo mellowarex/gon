@@ -637,7 +637,9 @@ func (this *Controller) Redirect(uri string, others ...string) {
 	if len(others) > 2 {
 		url += ":" + others[2]
 	}else {
-		url += ":" + port
+		if os.Getenv("GON_ENV") != "production" {
+			url += ":" + port
+		}
 	}
 
 	// attach redirect type
