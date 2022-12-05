@@ -125,9 +125,6 @@ func (this *Multiplexer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		goto Logging
 	}
 
-	// call controller init func
-	ctrl.Init(ctx, GConfig.Listen)
-
 	// session init
 	if GConfig.WebConfig.Session.SessionOn {
 		ctx.Input.Cookie, err = GlobalSessions.SessionStart(w, r)
@@ -137,6 +134,9 @@ func (this *Multiplexer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			goto Logging
 		}
 	}
+
+	// call controller init func
+	ctrl.Init(ctx, GConfig.Listen)
 
 	// perform before action
 	ctrl.BeforeAction()
