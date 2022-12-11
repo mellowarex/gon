@@ -12,13 +12,13 @@ var cookieProvide = &CookieProvider{}
 // Cookie SessionStore
 type Cookie struct{
 	sid   string
-	values map[interface{}]interface{}
+	values map[string]interface{}
 	lock sync.RWMutex
 }
 
 // Set value to cookie session
 // the value are encoded as gob with hash block string
-func (this *Cookie) Set(ctx context.Context, key, value interface{}, w http.ResponseWriter) error {
+func (this *Cookie) Set(ctx context.Context, key string, value interface{}, w http.ResponseWriter) error {
 	this.lock.Lock()
 	
 	this.values[key] = value
@@ -46,7 +46,7 @@ func (this *Cookie) Save(w http.ResponseWriter) {
 }
 
 // Get value from cookie session
-func (this *Cookie) Get(ctx context.Context, key interface{}) interface{} {
+func (this *Cookie) Get(ctx context.Context, key string) interface{} {
 	this.lock.RLock()
 	defer this.lock.RUnlock()
 	if v, ok := this.values[key]; ok {
@@ -56,18 +56,20 @@ func (this *Cookie) Get(ctx context.Context, key interface{}) interface{} {
 }
 
 // Delete value in cookie session
-func (this *Cookie) Delete(ctx context.Context, key interface{}) error {
+func (this *Cookie) Delete(ctx context.Context, key string, w http.ResponseWriter) error {
 	this.lock.Lock()
 	defer this.lock.Unlock()
 	delete(this.values, key)
+	this.Save(w)
 	return nil
 }
 
 // Flush Clean all values in cookie session
-func (this *Cookie) Flush(context.Context) error {
+func (this *Cookie) Flush(ctx context.Context, w http.ResponseWriter) error {
 	this.lock.Lock()
 	defer this.lock.Unlock()
-	this.values = make(map[interface{}]interface{})
+	this.values = make(map[string]interface{})
+	this.Save(w)
 	return nil
 }
 

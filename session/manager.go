@@ -171,7 +171,7 @@ func (manager *Manager) GC() {
 }
 
 func (manager *Manager) sessionID() (string, error) {
-	return encodeCookie(cookieProvide.block, cookieProvide.config.SecurityKey, cookieProvide.config.SecurityName, make(map[interface{}]interface{}))
+	return encodeCookie(cookieProvide.block, cookieProvide.config.SecurityKey, cookieProvide.config.SecurityName, make(map[string]interface{}))
 }
 
 // Set cookie with https

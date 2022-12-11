@@ -60,7 +60,7 @@ func (pder *CookieProvider) SessionRead(ctx context.Context, sid string) (*Cooki
 		pder.config.SecurityName,
 		sid, pder.maxlifetime)
 	if maps == nil {
-		maps = make(map[interface{}]interface{})
+		maps = make(map[string]interface{})
 	}
 	rs := &Cookie{sid: sid, values: maps}
 	return rs, nil

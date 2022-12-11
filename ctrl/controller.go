@@ -335,11 +335,20 @@ func (c *Controller) GetSession(name interface{}) interface{} {
 }
 
 // DelSession removes value from session.
-func (c *Controller) DelSession(name interface{}) error {
+func (c *Controller) DelSession(name interface{}, c.Writer) error {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
-	return c.Cookie.Delete(context2.Background(), name)
+	return c.Cookie.Delete(context2.Background(), name, c.Writer)
+}
+
+// FlushSession resets cookie values to empty map
+func (c *Controller) FlushSession() error {
+	if c.Cookie == nil {
+		c.StartSession()
+
+		return c.Cookie.Flush(context2.Background(), c.Writer)
+	}
 }
 
 // SessionRegenerateID regenerates session id for this session.
