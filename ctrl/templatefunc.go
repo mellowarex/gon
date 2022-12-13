@@ -1,6 +1,7 @@
 package ctrl
 
 import (
+	"github.com/mellowarex/gon"
 	"errors"
 	"fmt"
 	"html"
@@ -179,6 +180,39 @@ func NotNil(a interface{}) (isNil bool) {
 
 // 	return
 // }
+
+// build URL given uri
+func URLFor(uri, subdomain string) string {
+	listen := gon.GConfig.Listen
+	url, _, port := "http://", listen.HTTPAddr, strconv.Itoa(listen.HTTPPort)
+	if listen.EnableHTTPS {
+		url, _, port = "https://", listen.HTTPSAddr, strconv.Itoa(listen.HTTPSPort)
+	}
+
+	link := url
+
+	if len(subdomain) != 0 {
+		link += subdomain + "."
+	}
+
+	// if domain is present use it
+	// else default to localhost
+	if len(listen.Domains) > 0 {
+		link += listen.Domains[0]
+	} else {
+		link += "localhost"
+	}
+
+	// if in dev mode attach port
+	if gon.GConfig.EnvMode == "development" {
+		link += ":" + port
+	}
+
+	link += "/" + uri
+
+	return link
+
+}
 
 // Str2html Convert string to template.HTML type.
 func Str2html(raw string) template.HTML {
