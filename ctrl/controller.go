@@ -319,7 +319,7 @@ func (c *Controller) StartSession() *session.Cookie {
 }
 
 // SetSession puts value into session by name
-func (c *Controller) SetSession(name interface{}, value interface{}) error {
+func (c *Controller) SetSession(name string, value interface{}) error {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
@@ -327,7 +327,7 @@ func (c *Controller) SetSession(name interface{}, value interface{}) error {
 }
 
 // GetSession gets value from session
-func (c *Controller) GetSession(name interface{}) interface{} {
+func (c *Controller) GetSession(name string) interface{} {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
@@ -335,11 +335,19 @@ func (c *Controller) GetSession(name interface{}) interface{} {
 }
 
 // DelSession removes value from session.
-func (c *Controller) DelSession(name interface{}) error {
+func (c *Controller) DelSession(name string) error {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
-	return c.Cookie.Delete(context2.Background(), name)
+	return c.Cookie.Delete(context2.Background(), name, c.Writer)
+}
+
+// FlushSession resets cookie values to empty map
+func (c *Controller) FlushSession() error {
+	if c.Cookie == nil {
+		c.StartSession()
+	}
+	return c.Cookie.Flush(context2.Background(), c.Writer)
 }
 
 // SessionRegenerateID regenerates session id for this session.
@@ -356,7 +364,7 @@ func (c *Controller) SessionRegenerateID() error {
 
 // DestroySession cleans session data and session cookie.
 func (c *Controller) DestroySession() error {
-	err := c.Ctx.Input.Cookie.Flush(nil)
+	err := c.Ctx.Input.Cookie.Flush(nil, c.Writer)
 	if err != nil {
 		return err
 	}
@@ -589,7 +597,6 @@ func (c *Controller) XSRFField() string {
 // build <scheme-name>:<hierachal-part>[?query]
 func (this *Controller) Redirect(uri string, others ...string) {
 	code := 303 // default redirect type
-	fmt.Println(this.Listen.Domains)
 
 	// determine which http scheme to use
 	url, domain,port := "http://", this.Listen.HTTPAddr, strconv.Itoa(this.Listen.HTTPPort)
@@ -637,8 +644,6 @@ func (this *Controller) Redirect(uri string, others ...string) {
 	if len(others) > 2 {
 		url += ":" + others[2]
 	}else {
-		// if app is running in production environment
-		// default to :80, dont specify port
 		if os.Getenv("GON_ENV") != "production" {
 			url += ":" + port
 		}

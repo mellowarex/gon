@@ -136,7 +136,7 @@ func (this *Multiplexer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// call controller init func
-	ctrl.Init(ctx, GConfig.Listen)
+	ctrl.Init(ctx, GConfig.Listen) 
 
 	// perform before action
 	ctrl.BeforeAction()

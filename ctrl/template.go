@@ -53,7 +53,7 @@ func init() {
 	gonTplFuncMap["lt"] = lt // <
 	gonTplFuncMap["ne"] = ne // !=
 
-	// gonTplFuncMap["urlfor"] = URLFor // build a URL to match a Controller and it's method
+	gonTplFuncMap["urlfor"] = URLFor // build a URL to match a Controller and it's method
 	
 	gonViewPathTemplates["views"] = make(map[string]*template.Template)
 	buildTemplate("views")
@@ -169,7 +169,7 @@ func inSlice(v string, sl []string) bool {
 }
 
 func getTemplate(root string, fs http.FileSystem, file string, others ...string) (t *template.Template, err error) {
-	t = template.New(file).Delims("{{", "}}") // .Funcs(gonTplFuncMap)
+	t = template.New(file).Delims("{{", "}}").Funcs(gonTplFuncMap)
 	var subMods [][]string
 	t, subMods, err = getTplDeep(root, fs, file, "", t)
 	if err != nil {

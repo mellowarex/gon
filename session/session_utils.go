@@ -29,7 +29,7 @@ func init() {
 }
 
 // EncodeGob encode the obj to gob
-func EncodeGob(obj map[interface{}]interface{}) ([]byte, error) {
+func EncodeGob(obj map[string]interface{}) ([]byte, error) {
 	for _, v := range obj {
 		gob.Register(v)
 	}
@@ -43,10 +43,10 @@ func EncodeGob(obj map[interface{}]interface{}) ([]byte, error) {
 }
 
 // DecodeGob decode data to map
-func DecodeGob(encoded []byte) (map[interface{}]interface{}, error) {
+func DecodeGob(encoded []byte) (map[string]interface{}, error) {
 	buf := bytes.NewBuffer(encoded)
 	dec := gob.NewDecoder(buf)
-	var out map[interface{}]interface{}
+	var out map[string]interface{}
 	err := dec.Decode(&out)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func generateRandomKey(strength int) []byte {
 	return k
 }
 
-func encodeCookie(block cipher.Block, hashKey, name string, value map[interface{}]interface{}) (string, error) {
+func encodeCookie(block cipher.Block, hashKey, name string, value map[string]interface{}) (string, error) {
 	var err error
 	var b []byte
 	// 1. EncodeGob.
@@ -88,7 +88,7 @@ func encodeCookie(block cipher.Block, hashKey, name string, value map[interface{
 	return string(b), nil
 }
 
-func decodeCookie(block cipher.Block, hashKey, name, value string, gcmaxlifetime int64) (map[interface{}]interface{}, error) {
+func decodeCookie(block cipher.Block, hashKey, name, value string, gcmaxlifetime int64) (map[string]interface{}, error) {
 	// 1. Decode from base64.
 	b, err := decode([]byte(value))
 	if err != nil {
