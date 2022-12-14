@@ -104,6 +104,8 @@ func (srv *Server) ListenAndServeTLS(certFile, keyFile string) (err error) {
 		addr = ":https"
 	}
 
+	// only consider default config if certfile and keyfile
+	// is not empty
 	if certFile != "" && keyFile != "" {
 		fmt.Println("certfile: ",certFile, " keyFile: ",keyFile)
 		if srv.TLSConfig == nil {
