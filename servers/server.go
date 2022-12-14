@@ -104,24 +104,28 @@ func (srv *Server) ListenAndServeTLS(certFile, keyFile string) (err error) {
 		addr = ":https"
 	}
 
-	if srv.TLSConfig == nil {
-		srv.TLSConfig = &tls.Config{}
-	}
-	if srv.TLSConfig.NextProtos == nil {
-		srv.TLSConfig.NextProtos = []string{"http/1.1"}
-	}
+	if certFile != "" && keyFile != "" {
+		fmt.Println("certfile: ",certFile, " keyFile: ",keyFile)
+		if srv.TLSConfig == nil {
+			srv.TLSConfig = &tls.Config{}
+		}
+		if srv.TLSConfig.NextProtos == nil {
+			srv.TLSConfig.NextProtos = []string{"http/1.1"}
+		}
 
-	srv.TLSConfig.Certificates = make([]tls.Certificate, 1)
-	srv.TLSConfig.Certificates[0], err = tls.LoadX509KeyPair(certFile, keyFile)
-	if err != nil {
-		return
-	}
+		srv.TLSConfig.Certificates = make([]tls.Certificate, 1)
+		srv.TLSConfig.Certificates[0], err = tls.LoadX509KeyPair(certFile, keyFile)
+		if err != nil {
+			return
+		}
+	}	
 
 	go srv.handleSignals()
 
 	ln, err := srv.getListener(addr)
 	if err != nil {
 		logs.Error(err)
+		fmt.Println("get listener err:, ",err)
 		return err
 	}
 	srv.ln = tls.NewListener(tcpKeepAliveListener{ln.(*net.TCPListener)}, srv.TLSConfig)
@@ -130,6 +134,7 @@ func (srv *Server) ListenAndServeTLS(certFile, keyFile string) (err error) {
 		process, err := os.FindProcess(os.Getppid())
 		if err != nil {
 			logs.Error(err)
+			fmt.Println("find process err:, ",err)
 			return err
 		}
 		err = process.Signal(syscall.SIGTERM)
