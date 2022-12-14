@@ -4,8 +4,11 @@ import (
 	"net/http"
 	"time"
 	"fmt"
-
+	"os"
+	"crypto/tls"
+	"github.com/mellowarex/gon/logs"
 	"github.com/mellowarex/gon/servers"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 type HServer struct {
@@ -61,6 +64,28 @@ func (this *HServer) Run() {
 			server.ServerName = this.Config.ServerName
 			server.AppName = this.Config.AppName
 			server.EnvMode = this.Config.EnvMode
+
+			if this.Config.Listen.EnableMutualHTTPS {
+				if err := server.ListenAndServeMutualTLS(this.Config.Listen.HTTPSCertFile, this.Config.Listen.HTTPSKeyFile, this.Config.Listen.TrustCaFile); err != nil {
+					logs.Critical("Server MutualTLS failed to start, reason: ", err, fmt.Sprintf("pid: %d", os.Getpid()))
+					time.Sleep(100 * time.Microsecond)
+				}
+			} else {
+				if this.Config.Listen.AutoTLS {
+					m := autocert.Manager{
+						Prompt:   	autocert.AcceptTOS,
+						HostPolicy:	autocert.HostWhitelist(this.Config.Listen.Domains...),
+						Cache:			autocert.DirCache(this.Config.Listen.TLSCacheDir),
+					}
+					this.Server.TLSConfig = &tls.Config{GetCertificate: m.GetCertificate}
+					this.Config.Listen.HTTPSCertFile, this.Config.Listen.HTTPSKeyFile = "", ""
+				}
+				if err := server.ListenAndServeTLS(this.Config.Listen.HTTPSCertFile, this.Config.Listen.HTTPSKeyFile); err != nil {
+					logs.Critical("Server TLS failed to start, reason: ", err, fmt.Sprintf("pid: %d", os.Getpid()))
+					time.Sleep(100 * time.Microsecond)
+				}
+			}
+
 			endRunning <- true
 		}()
 	}else {
@@ -76,7 +101,8 @@ func (this *HServer) Run() {
 				server.Network = "tcp4"
 			}
 			if err := server.ListenAndServe(); err != nil {
-
+				logs.Critical("Server failed to start, reason: ", err, fmt.Sprintf("pid: %d", os.Getpid()))
+				time.Sleep(100 * time.Microsecond)
 			}
 			endRunning <- true
 		}()
