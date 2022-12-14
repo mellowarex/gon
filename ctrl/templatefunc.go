@@ -189,6 +189,10 @@ func URLFor(uri, subdomain string) string {
 		url, _, port = "https://", listen.HTTPSAddr, strconv.Itoa(listen.HTTPSPort)
 	}
 
+	if gon.GConfig.EnvMode == "production" {
+		url, _, port = "https://", listen.HTTPSAddr, strconv.Itoa(listen.HTTPSPort)
+	}
+
 	link := url
 
 	if len(subdomain) != 0 {
