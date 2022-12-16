@@ -90,6 +90,7 @@ func (manager *Manager) GetProvider() *CookieProvider {
 // otherwise return a  valid session.id
 func (manager *Manager) getSid(r *http.Request) (string, error) {
 	cookie, errs := r.Cookie(manager.config.CookieName)
+	fmt.Println("Manager cookieName: ", manager.config.CookieName)
 	if errs != nil || cookie.Value == "" {
 		var sid string
 		if manager.config.EnableSidInURLQuery {
@@ -108,7 +109,7 @@ func (manager *Manager) getSid(r *http.Request) (string, error) {
 				return sids[0], nil
 			}
 		}
-
+		fmt.Println("cookie: sid: ", sid)
 		return sid, nil
 	}
 

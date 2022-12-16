@@ -323,7 +323,10 @@ func (c *Controller) SetSession(name string, value interface{}) error {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
-	return c.Cookie.Set(context2.Background(), name, value, c.Writer)
+
+	c.Cookie.Set(context2.Background(), name, value,c.Request, c.Writer)
+	c.Cookie.Save(context2.Background(),nil, c.Request, c.Writer)
+	return nil
 }
 
 // GetSession gets value from session
@@ -339,7 +342,7 @@ func (c *Controller) DelSession(name string) error {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
-	return c.Cookie.Delete(context2.Background(), name, c.Writer)
+	return c.Cookie.Delete(context2.Background(), name,c.Request, c.Writer)
 }
 
 // FlushSession resets cookie values to empty map
@@ -347,7 +350,7 @@ func (c *Controller) FlushSession() error {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
-	return c.Cookie.Flush(context2.Background(), c.Writer)
+	return c.Cookie.Flush(context2.Background(),c.Request, c.Writer)
 }
 
 // SessionRegenerateID regenerates session id for this session.
@@ -364,7 +367,7 @@ func (c *Controller) SessionRegenerateID() error {
 
 // DestroySession cleans session data and session cookie.
 func (c *Controller) DestroySession() error {
-	err := c.Ctx.Input.Cookie.Flush(nil, c.Writer)
+	err := c.Ctx.Input.Cookie.Flush(nil,c.Request, c.Writer)
 	if err != nil {
 		return err
 	}
