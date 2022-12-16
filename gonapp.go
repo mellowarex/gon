@@ -67,7 +67,7 @@ func (this *HServer) Run() {
 
 			if this.Config.Listen.EnableMutualHTTPS {
 				if err := server.ListenAndServeMutualTLS(this.Config.Listen.HTTPSCertFile, this.Config.Listen.HTTPSKeyFile, this.Config.Listen.TrustCaFile); err != nil {
-					logs.Critical("Server MutualTLS failed to start, reason: ", err, fmt.Sprintf("pid: %d", os.Getpid()))
+					logs.Critical("Server MutualTLS shutdown, reason: ", err, fmt.Sprintf("pid: %d", os.Getpid()))
 					time.Sleep(100 * time.Microsecond)
 				}
 			} else {
@@ -81,7 +81,7 @@ func (this *HServer) Run() {
 					this.Config.Listen.HTTPSCertFile, this.Config.Listen.HTTPSKeyFile = "", ""
 				}
 				if err := server.ListenAndServeTLS(this.Config.Listen.HTTPSCertFile, this.Config.Listen.HTTPSKeyFile); err != nil {
-					logs.Critical("Server TLS failed to start, reason: ", err, fmt.Sprintf("pid: %d", os.Getpid()))
+					logs.Critical("Server TLS shutdown, reason: ", err, fmt.Sprintf("pid: %d", os.Getpid()))
 					time.Sleep(100 * time.Microsecond)
 				}
 			}
@@ -101,7 +101,7 @@ func (this *HServer) Run() {
 				server.Network = "tcp4"
 			}
 			if err := server.ListenAndServe(); err != nil {
-				logs.Critical("Server failed to start, reason: ", err, fmt.Sprintf("pid: %d", os.Getpid()))
+				logs.Critical("Server shutdown, reason: ", err, fmt.Sprintf("pid: %d", os.Getpid()))
 				time.Sleep(100 * time.Microsecond)
 			}
 			endRunning <- true

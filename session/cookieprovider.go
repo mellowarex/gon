@@ -5,6 +5,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"github.com/mellowarex/gon/utils"
+	// "fmt"
 )
 
 type cookieConfig struct {
@@ -62,6 +63,7 @@ func (pder *CookieProvider) SessionRead(ctx context.Context, sid string) (*Cooki
 	if maps == nil {
 		maps = make(map[string]interface{})
 	}
+	// fmt.Println("session read values: ", maps)
 	rs := &Cookie{sid: sid, values: maps}
 	return rs, nil
 }

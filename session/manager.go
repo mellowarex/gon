@@ -2,7 +2,7 @@ package session
 
 import (
 	"errors"
-	"fmt"
+	// "fmt"
 	"net/http"
 	"net/textproto"
 	"net/url"
@@ -90,7 +90,6 @@ func (manager *Manager) GetProvider() *CookieProvider {
 // otherwise return a  valid session.id
 func (manager *Manager) getSid(r *http.Request) (string, error) {
 	cookie, errs := r.Cookie(manager.config.CookieName)
-	fmt.Println("Manager cookieName: ", manager.config.CookieName)
 	if errs != nil || cookie.Value == "" {
 		var sid string
 		if manager.config.EnableSidInURLQuery {
@@ -109,7 +108,7 @@ func (manager *Manager) getSid(r *http.Request) (string, error) {
 				return sids[0], nil
 			}
 		}
-		fmt.Println("cookie: sid: ", sid)
+		// fmt.Println("cookie: sid: ", sid)
 		return sid, nil
 	}
 
@@ -120,7 +119,9 @@ func (manager *Manager) getSid(r *http.Request) (string, error) {
 // SessionStart generate or read the session id from http request.
 // if session id exists, return SessionStore with this id.
 func (manager *Manager) SessionStart(w http.ResponseWriter, r *http.Request) (session *Cookie, err error) {
+	// fmt.Println("session started")
 	sid, errs := manager.getSid(r)
+	// fmt.Println("session sid: ", sid)
 	if errs != nil {
 		return &Cookie{}, errs
 	}
@@ -131,11 +132,12 @@ func (manager *Manager) SessionStart(w http.ResponseWriter, r *http.Request) (se
 	// Generate a new session
 	sid, errs = manager.sessionID()
 	if errs != nil {
-		fmt.Println(errs)
+		// fmt.Println(errs)
 		return nil, errs
 	}
 
 	session, err = manager.provider.SessionRead(nil, sid)
+	// fmt.Println("session new values", session.values)
 	if err != nil {
 		return nil, err
 	}

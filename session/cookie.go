@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/url"
 	"sync"
-	"fmt"
 )
 
 var cookieProvide = &CookieProvider{}
@@ -23,14 +22,11 @@ func (this *Cookie) Set(ctx context.Context, key string, value interface{},r *ht
 	this.lock.Lock()
 	defer this.lock.Unlock()
 	this.values[key] = value
-	fmt.Println("set cookie: ", this.values)
 	return nil
 }
 // Save Write cookie session to http response cookie
 func (this *Cookie) Save(ctx context.Context,rr interface{} ,r *http.Request, w http.ResponseWriter) error {
 	encodedCookie, err := encodeCookie(cookieProvide.block, cookieProvide.config.SecurityKey, cookieProvide.config.SecurityName, this.values)
-	fmt.Println("saving: ",this.values)
-	fmt.Println("cookie: ",encodedCookie)
 	if err == nil {
 		cookie := &http.Cookie{Name: cookieProvide.config.CookieName,
 			Value:    url.QueryEscape(encodedCookie),

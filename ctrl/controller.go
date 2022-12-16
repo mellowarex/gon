@@ -86,6 +86,7 @@ func (this *Controller) Init(ctx *context.Context, listen gon.Listen) {
 	this.Writer = ctx.ResponseWriter
 	this.Request = ctx.Request
 	this.methodMapping = make(map[string]func())
+	this.Cookie = ctx.Input.Cookie
 
 	this.Listen = listen
 }
@@ -334,7 +335,7 @@ func (c *Controller) GetSession(name string) interface{} {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
-	return c.Cookie.Get(context2.Background(),name)
+	return  c.Cookie.Get(context2.Background(),name)
 }
 
 // DelSession removes value from session.
@@ -342,7 +343,9 @@ func (c *Controller) DelSession(name string) error {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
-	return c.Cookie.Delete(context2.Background(), name,c.Request, c.Writer)
+	c.Cookie.Delete(context2.Background(), name,c.Request, c.Writer)
+	c.Cookie.Save(context2.Background(),nil, c.Request, c.Writer)
+	return nil
 }
 
 // FlushSession resets cookie values to empty map
@@ -350,7 +353,9 @@ func (c *Controller) FlushSession() error {
 	if c.Cookie == nil {
 		c.StartSession()
 	}
-	return c.Cookie.Flush(context2.Background(),c.Request, c.Writer)
+	c.Cookie.Flush(context2.Background(),c.Request, c.Writer)
+	c.Cookie.Save(context2.Background(),nil, c.Request, c.Writer)
+	return nil
 }
 
 // SessionRegenerateID regenerates session id for this session.
