@@ -117,7 +117,7 @@ func searchFile(ctx *context.Context) (string, os.FileInfo, error) {
 	requestPath := filepath.ToSlash(filepath.Clean(ctx.Request.URL.Path))
 	// special processing: favicon.ico|robots.txt 
 	// look for them only in /public folder of webapp
-	if requestPath == "/favicon.ico" || requestPath == "/robots.txt" {
+	if requestPath == "/favicon.ico" || requestPath == "/robots.txt" || requestPath == "/sitemap.xml" {
 		filepath := path.Join("public", requestPath[1:])
 		if fi, _ := os.Stat(filepath); fi != nil {
 			return filepath, fi, nil
